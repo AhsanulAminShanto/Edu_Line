@@ -4,6 +4,8 @@ import '../widgets/onboarding_page_widget.dart';
 import '../widgets/splash_widget.dart';
 
 class OnboardingScreen extends StatefulWidget {
+  const OnboardingScreen({super.key});
+
   @override
   _OnboardingScreenState createState() => _OnboardingScreenState();
 }

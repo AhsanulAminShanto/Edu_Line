@@ -4,7 +4,7 @@ import 'package:edu_line/features/auth/presentation/screens/home_screen.dart';
 class LocationSelectionScreen extends StatefulWidget {
   final String selectedLanguage;
 
-  LocationSelectionScreen({required this.selectedLanguage});
+  const LocationSelectionScreen({super.key, required this.selectedLanguage});
 
   @override
   _LocationSelectionScreenState createState() => _LocationSelectionScreenState();
@@ -87,22 +87,22 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen> {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: _traceLiveLocation,
-              child: Text('Live Location Trace'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green, // Different color to distinguish
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                 minimumSize: Size(double.infinity, 50),
               ),
+              child: Text('Live Location Trace'),
             ),
             SizedBox(height: 10),
             ElevatedButton(
               onPressed: _submitLocation,
-              child: Text('Submit'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                 minimumSize: Size(double.infinity, 50),
               ),
+              child: Text('Submit'),
             ),
           ],
         ),

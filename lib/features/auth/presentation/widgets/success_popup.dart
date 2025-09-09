@@ -1,9 +1,10 @@
+// lib/features/auth/presentation/widgets/success_popup.dart
 import 'package:flutter/material.dart';
 
 class SuccessPopup extends StatelessWidget {
   final VoidCallback onContinue;
 
-  const SuccessPopup({required this.onContinue});
+  const SuccessPopup({super.key, required this.onContinue});
 
   @override
   Widget build(BuildContext context) {
@@ -22,17 +23,7 @@ class SuccessPopup extends StatelessWidget {
               ),
             ),
             SizedBox(height: 10),
-            Container(
-              width: 100,
-              height: 100,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.lightBlue[50],
-              ),
-              child: Center(
-                child: Icon(Icons.check, size: 50, color: Colors.blue),
-              ),
-            ),
+            Icon(Icons.check_circle, size: 50, color: Colors.green),
             SizedBox(height: 20),
             Text(
               'Successfully Registered',
@@ -40,7 +31,7 @@ class SuccessPopup extends StatelessWidget {
             ),
             SizedBox(height: 10),
             Text(
-              'Your account has been registered successfully, now let\'s enjoy our features!',
+              'Your account has been created. Please sign in.',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 16, color: Colors.grey),
             ),
@@ -48,11 +39,6 @@ class SuccessPopup extends StatelessWidget {
             ElevatedButton(
               onPressed: onContinue,
               child: Text('Continue'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                minimumSize: Size(double.infinity, 50),
-              ),
             ),
           ],
         ),

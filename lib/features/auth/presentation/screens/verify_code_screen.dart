@@ -1,11 +1,11 @@
-import 'package:edu_line/features/auth/presentation/screens/reset_password_screen.dart';
+import 'package:email_otp/email_otp.dart' show EmailOTP, OTPType, EmailTheme;
 import 'package:flutter/material.dart';
-
+import 'package:edu_line/features/auth/presentation/screens/reset_password_screen.dart';
 
 class VerifyCodeScreen extends StatefulWidget {
   final String email;
 
-  VerifyCodeScreen({required this.email});
+  const VerifyCodeScreen({super.key, required this.email});
 
   @override
   _VerifyCodeScreenState createState() => _VerifyCodeScreenState();
@@ -15,12 +15,59 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
   final _formKey = GlobalKey<FormState>();
   final _codeController = TextEditingController();
 
-  void _submitCode() {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // Configure EmailOTP
+      EmailOTP.config(
+        appName: 'MyApp',
+        otpType: OTPType.numeric,
+        emailTheme: EmailTheme.v1,
+        expiry: 50000,
+      );
+
+      // Send OTP
+      try {
+        final success = await EmailOTP.sendOTP(email: widget.email);
+        if (success) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('OTP has been sent')),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Failed to send OTP')),
+          );
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error sending OTP: $e')),
+        );
+      }
+    });
+  }
+  void _submitCode() async {
     if (_formKey.currentState!.validate()) {
+      try {
+
+
+    if (await EmailOTP.verifyOTP(otp: _codeController.text)) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => ResetPasswordScreen(email: widget.email)),
       );
+
+    } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(content: Text('Invalid code')));
+    }
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => ResetPasswordScreen(email: widget.email)),
+        // );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Invalid code2')));
+      }
     }
   }
 
@@ -64,7 +111,6 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) return 'Please enter the code';
-                  if (value.length != 6) return 'Code must be 6 digits';
                   return null;
                 },
                 keyboardType: TextInputType.number,
@@ -72,12 +118,12 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _submitCode,
-                child: Text('Verify'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                   minimumSize: Size(double.infinity, 50),
                 ),
+                child: Text('Verify'),
               ),
               SizedBox(height: 10),
               TextButton(

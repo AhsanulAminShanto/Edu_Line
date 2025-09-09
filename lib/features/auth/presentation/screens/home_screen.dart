@@ -4,7 +4,7 @@ class HomeScreen extends StatelessWidget {
   final String selectedLanguage;
   final String selectedLocation;
 
-  HomeScreen({required this.selectedLanguage, required this.selectedLocation});
+  const HomeScreen({super.key, required this.selectedLanguage, required this.selectedLocation});
 
   @override
   Widget build(BuildContext context) {
@@ -47,12 +47,12 @@ class HomeScreen extends StatelessWidget {
                   SnackBar(content: Text('Starting Theory Test...')),
                 );
               },
-              child: Text('Start Theory Test'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                 minimumSize: Size(double.infinity, 50),
               ),
+              child: Text('Start Theory Test'),
             ),
             SizedBox(height: 10),
             ElevatedButton(
@@ -62,12 +62,12 @@ class HomeScreen extends StatelessWidget {
                   SnackBar(content: Text('Exploring Courses...')),
                 );
               },
-              child: Text('Explore Courses'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                 minimumSize: Size(double.infinity, 50),
               ),
+              child: Text('Explore Courses'),
             ),
           ],
         ),

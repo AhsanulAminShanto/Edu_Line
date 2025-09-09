@@ -1,12 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-import '../widgets/reset_success_popup.dart';
-
+import 'package:edu_line/features/auth/presentation/widgets/reset_success_popup.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   final String email;
 
-  ResetPasswordScreen({required this.email});
+  const ResetPasswordScreen({super.key, required this.email});
 
   @override
   _ResetPasswordScreenState createState() => _ResetPasswordScreenState();
@@ -25,17 +24,36 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     });
   }
 
-  void _submitPassword() {
+  void _submitPassword() async {
     if (_formKey.currentState!.validate() && _isPasswordValid && _newPasswordController.text == _confirmPasswordController.text) {
-      showDialog(
-        context: context,
-        builder: (context) => ResetSuccessPopup(
-          onContinue: () {
-            Navigator.pop(context); // Close popup
-            Navigator.pushNamedAndRemoveUntil(context, '/sign_in', (route) => false); // Back to sign-in
-          },
-        ),
-      );
+      final scaffoldMessenger = ScaffoldMessenger.of(context);
+      try {
+        scaffoldMessenger.showSnackBar(SnackBar(content: Text('Resetting password...')));
+        // Note: For a fully functional reset, you need the OOB code from the dynamic link
+        // This is a placeholder since dynamic links aren't fully integrated here
+        // await FirebaseAuth.instance.confirmPasswordReset(
+        //   code: oobCode, // Obtain from dynamic link
+        //   newPassword: _newPasswordController.text.trim(),
+        // );
+        // Simulate success for demo
+        await Future.delayed(Duration(seconds: 1)); // Simulate API call
+        scaffoldMessenger.hideCurrentSnackBar();
+        showDialog(
+          context: context,
+          builder: (context) => ResetSuccessPopup(
+            onContinue: () {
+              Navigator.pop(context); // Close popup
+              Navigator.pushNamedAndRemoveUntil(context, '/sign_in', (route) => false); // Back to sign-in
+            },
+          ),
+        );
+      } on FirebaseAuthException catch (e) {
+        scaffoldMessenger.hideCurrentSnackBar();
+        scaffoldMessenger.showSnackBar(SnackBar(content: Text(e.message ?? 'Reset failed')));
+      } catch (e) {
+        scaffoldMessenger.hideCurrentSnackBar();
+        scaffoldMessenger.showSnackBar(SnackBar(content: Text('An error occurred: $e')));
+      }
     }
   }
 
@@ -116,12 +134,12 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _submitPassword,
-                child: Text('Reset Password'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                   minimumSize: Size(double.infinity, 50),
                 ),
+                child: Text('Reset Password'),
               ),
               SizedBox(height: 10),
               TextButton(

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ResetSuccessPopup extends StatelessWidget {
   final VoidCallback onContinue;
 
-  const ResetSuccessPopup({required this.onContinue});
+  const ResetSuccessPopup({super.key, required this.onContinue});
 
   @override
   Widget build(BuildContext context) {
@@ -47,12 +47,12 @@ class ResetSuccessPopup extends StatelessWidget {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: onContinue,
-              child: Text('Continue'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                 minimumSize: Size(double.infinity, 50),
               ),
+              child: Text('Continue'),
             ),
           ],
         ),
